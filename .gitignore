@@ -1,0 +1,8 @@
+.env
+.env.*
+*.pem
+node_modules/
+dist/
+target/
+.git/
+.DS_Store
