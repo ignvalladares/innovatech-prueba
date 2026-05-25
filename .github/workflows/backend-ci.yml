@@ -1,4 +1,5 @@
 name: Backend CI
+run-name: Backend CI - ${{ github.head_ref || github.ref_name }}
 
 on:
   push:
