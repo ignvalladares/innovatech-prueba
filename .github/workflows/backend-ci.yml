@@ -1,0 +1,44 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ "main", "deploy" ]
+    paths:
+      - "back-Ventas_SpringBoot/**"
+      - "back-Despachos_SpringBoot/**"
+      - ".github/workflows/backend-ci.yml"
+  pull_request:
+    branches: [ "main", "deploy" ]
+    paths:
+      - "back-Ventas_SpringBoot/**"
+      - "back-Despachos_SpringBoot/**"
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build ventas
+        working-directory: back-Ventas_SpringBoot/Springboot-API-REST
+        run: mvn -B -DskipTests clean package
+
+      - name: Build despachos
+        working-directory: back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
+        run: mvn -B -DskipTests clean package
+
+      - name: Build Docker image ventas
+        working-directory: back-Ventas_SpringBoot/Springboot-API-REST
+        run: docker build -t isy1101-api-ventas:ci .
+
+      - name: Build Docker image despachos
+        working-directory: back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
+        run: docker build -t isy1101-api-despachos:ci .
